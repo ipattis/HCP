@@ -391,35 +391,41 @@ section {
   transform: translateY(-2px)
 }
 
-/* ===== GITHUB STATS ===== */
-.github-stats {
+/* ===== GITHUB STATS (nav) ===== */
+.gh-stats {
   display: flex;
-  gap: .8rem;
-  margin-top: 1.5rem;
-  justify-content: center
-}
-
-.stat-badge {
-  display: inline-flex;
   align-items: center;
-  gap: .35rem;
-  padding: .4rem .9rem;
-  border-radius: 100px;
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--text-dim);
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all .2s;
-  text-decoration: none
+  gap: 1rem
 }
 
-.stat-badge:hover {
-  border-color: var(--accent);
-  color: var(--text-bright);
-  transform: translateY(-1px)
+.gh-link,
+.gh-stat {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color .25s ease
+}
+
+.gh-link:hover,
+.gh-stat:hover {
+  color: var(--text-bright)
+}
+
+.gh-link svg {
+  width: 20px;
+  height: 20px
+}
+
+.gh-stat svg {
+  width: 15px;
+  height: 15px
+}
+
+.gh-stat span {
+  font-size: .8rem;
+  font-weight: 500
 }
 
 /* ===== GLASS CARDS ===== */
