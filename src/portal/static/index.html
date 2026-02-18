@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HCP — Human Coordination Plane</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="app.js"></script>
+</head>
+<body>
+  <div id="app" x-data="hcpPortal()" x-init="init()">
+    <header>
+      <h1>HCP Portal</h1>
+      <div class="status">
+        <span x-show="connected" class="badge badge-ok">Connected</span>
+        <span x-show="!connected" class="badge badge-error">Disconnected</span>
+        <span class="responder" x-text="'Responder: ' + responderId"></span>
+      </div>
+    </header>
+
+    <main>
+      <div x-show="loading" class="loading">Loading requests...</div>
+
+      <div x-show="!loading && requests.length === 0" class="empty">
+        No pending requests.
+      </div>
+
+      <template x-for="cr in requests" :key="cr.request_id">
+        <div class="card" :class="'urgency-' + cr.urgency.toLowerCase()">
+          <div class="card-header">
+            <span class="intent" x-text="cr.intent"></span>
+            <span class="urgency badge" :class="'badge-' + cr.urgency.toLowerCase()" x-text="cr.urgency"></span>
+            <span class="state badge" x-text="cr.state"></span>
+          </div>
+
+          <div class="card-body">
+            <p class="summary" x-text="cr.context_package.summary"></p>
+            <div x-show="cr.context_package.detail" class="detail">
+              <p x-text="cr.context_package.detail"></p>
+            </div>
+            <div class="meta">
+              <small>Agent: <span x-text="cr.agent_id"></span></small>
+              <small>ID: <code x-text="cr.request_id"></code></small>
+              <small>Timeout: <span x-text="formatTime(cr.timeout_at)"></span></small>
+            </div>
+          </div>
+
+          <div class="card-actions" x-show="cr.state === 'PENDING_RESPONSE'">
+            <template x-if="cr.intent === 'APPROVAL'">
+              <div class="approval-actions">
+                <button class="btn btn-approve" @click="respond(cr.request_id, { decision: 'approved' })">
+                  Approve
+                </button>
+                <button class="btn btn-reject" @click="respond(cr.request_id, { decision: 'rejected' })">
+                  Reject
+                </button>
+              </div>
+            </template>
+
+            <template x-if="cr.intent !== 'APPROVAL'">
+              <div class="response-form">
+                <textarea
+                  x-ref="'response_' + cr.request_id"
+                  placeholder="Type your response..."
+                  class="response-input"
+                  @keydown.meta.enter="respondText(cr.request_id, $el.value)"
+                ></textarea>
+                <button class="btn btn-primary" @click="respondText(cr.request_id, $refs['response_' + cr.request_id]?.value || '')">
+                  Submit Response
+                </button>
+              </div>
+            </template>
+          </div>
+
+          <div class="card-response" x-show="cr.response_data">
+            <strong>Response:</strong>
+            <pre x-text="JSON.stringify(cr.response_data, null, 2)"></pre>
+          </div>
+        </div>
+      </template>
+    </main>
+  </div>
+</body>
+</html>
