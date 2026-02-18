@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HCP — Human Coordination Plane</title>
+  <meta name="description"
+    content="A standalone service that bridges autonomous AI agents and human decision-makers. Route approvals, clarifications, and escalations through a web portal or Slack.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <div class="mesh-bg"></div>
+  <div class="grain"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-brand">⬡ <span>HCP</span></div>
+      <ul class="nav-links">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#api">API</a></li>
+        <li><a href="#stack">Stack</a></li>
+        <li><a href="https://github.com/isaacpattis/HCP" target="_blank">GitHub ↗</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge"><span class="dot"></span> v0.1.0 — Now Open Source</div>
+    <h1>Human<br><span class="gradient">Coordination Plane</span></h1>
+    <p>A standalone service that bridges autonomous AI agents and human decision-makers. Route approvals,
+      clarifications, and escalations — with a full audit trail.</p>
+    <div class="hero-buttons">
+      <a class="btn btn-primary" href="https://github.com/isaacpattis/HCP" target="_blank">⬡ View on GitHub</a>
+      <a class="btn btn-ghost" href="#quickstart">Get Started →</a>
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="reveal">
+      <div class="section-label">Overview</div>
+      <h2 class="section-title">Close the loop between agents and humans</h2>
+      <p class="section-desc">Agents currently have no way to request human approval, clarification, or escalation —
+        they either proceed autonomously or fail silently. HCP fills this gap.</p>
+    </div>
+    <div class="flow reveal">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <p>An agent <strong>submits a Coordination Request</strong> with context, urgency, and a timeout policy.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <p>HCP <strong>routes the CR</strong> to the designated human responder via the web portal or Slack.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <p>The human <strong>reviews and responds</strong> — approve, reject, provide input, or escalate.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <p>The agent <strong>polls or receives</strong> the structured response and continues execution.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <p>Every state change is recorded in an <strong>append-only audit log</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section id="architecture">
+    <div class="reveal">
+      <div class="section-label">Architecture</div>
+      <h2 class="section-title">How it all connects</h2>
+    </div>
+    <div class="arch-diagram reveal">
+      <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" fill="none"
+        style="width:100%;max-width:900px;margin:0 auto;display:block">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <linearGradient id="gr1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="hsl(265,90%,65%)" />
+            <stop offset="100%" stop-color="hsl(190,95%,55%)" />
+          </linearGradient>
+          <linearGradient id="gr2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="hsl(190,95%,55%)" />
+            <stop offset="100%" stop-color="hsl(330,85%,60%)" />
+          </linearGradient>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+            orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="hsl(190,95%,55%)" opacity=".8" />
+          </marker>
+          <marker id="arrowP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+            orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="hsl(265,90%,65%)" opacity=".8" />
+          </marker>
+        </defs>
+        <!-- Boxes -->
+        <rect x="40" y="160" width="180" height="90" rx="14" stroke="url(#gr1)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.7)" filter="url(#glow)" />
+        <text x="130" y="197" text-anchor="middle" fill="hsl(0,0%,96%)" font-family="Inter,sans-serif" font-size="14"
+          font-weight="700">AI Agent</text>
+        <text x="130" y="220" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif"
+          font-size="11">(NanoClaw etc)</text>
+
+        <rect x="340" y="140" width="220" height="130" rx="14" stroke="url(#gr1)" stroke-width="2"
+          fill="hsla(228,20%,14%,.7)" filter="url(#glow)" />
+        <text x="450" y="195" text-anchor="middle" fill="hsl(0,0%,96%)" font-family="Inter,sans-serif" font-size="15"
+          font-weight="800">HCP Server</text>
+        <text x="450" y="218" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif"
+          font-size="11">Fastify · SQLite</text>
+        <text x="450" y="238" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif"
+          font-size="11">State Machine · Router</text>
+
+        <rect x="680" y="160" width="180" height="90" rx="14" stroke="url(#gr2)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.7)" filter="url(#glow)" />
+        <text x="770" y="197" text-anchor="middle" fill="hsl(0,0%,96%)" font-family="Inter,sans-serif" font-size="14"
+          font-weight="700">Slack</text>
+        <text x="770" y="220" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif"
+          font-size="11">Block Kit · Buttons</text>
+
+        <rect x="360" y="20" width="180" height="80" rx="14" stroke="url(#gr1)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.7)" filter="url(#glow)" />
+        <text x="450" y="55" text-anchor="middle" fill="hsl(0,0%,96%)" font-family="Inter,sans-serif" font-size="14"
+          font-weight="700">Web Portal</text>
+        <text x="450" y="76" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif"
+          font-size="11">Alpine.js · SSE</text>
+
+        <rect x="360" y="320" width="180" height="80" rx="14" stroke="url(#gr2)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.7)" filter="url(#glow)" />
+        <text x="450" y="355" text-anchor="middle" fill="hsl(0,0%,96%)" font-family="Inter,sans-serif" font-size="14"
+          font-weight="700">Audit Store</text>
+        <text x="450" y="376" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif"
+          font-size="11">Append-only log</text>
+
+        <!-- Lines -->
+        <line x1="220" y1="190" x2="340" y2="190" stroke="hsl(190,95%,55%)" stroke-width="1.5" opacity=".6"
+          marker-end="url(#arrow)" />
+        <text x="280" y="183" text-anchor="middle" fill="hsl(190,95%,55%)" font-family="JetBrains Mono,monospace"
+          font-size="9" opacity=".9">REST API</text>
+
+        <line x1="340" y1="215" x2="220" y2="215" stroke="hsl(265,90%,65%)" stroke-width="1.5" opacity=".6"
+          marker-end="url(#arrowP)" />
+        <text x="280" y="232" text-anchor="middle" fill="hsl(265,90%,65%)" font-family="JetBrains Mono,monospace"
+          font-size="9" opacity=".9">Poll / SSE</text>
+
+        <line x1="560" y1="195" x2="680" y2="195" stroke="hsl(190,95%,55%)" stroke-width="1.5" opacity=".6"
+          marker-end="url(#arrow)" />
+        <text x="620" y="188" text-anchor="middle" fill="hsl(190,95%,55%)" font-family="JetBrains Mono,monospace"
+          font-size="9" opacity=".9">Slack API</text>
+
+        <line x1="680" y1="220" x2="560" y2="220" stroke="hsl(265,90%,65%)" stroke-width="1.5" opacity=".6"
+          marker-end="url(#arrowP)" />
+        <text x="620" y="237" text-anchor="middle" fill="hsl(265,90%,65%)" font-family="JetBrains Mono,monospace"
+          font-size="9" opacity=".9">Interactions</text>
+
+        <line x1="450" y1="140" x2="450" y2="100" stroke="hsl(190,95%,55%)" stroke-width="1.5" opacity=".6"
+          marker-end="url(#arrow)" />
+        <line x1="450" y1="270" x2="450" y2="320" stroke="hsl(265,90%,65%)" stroke-width="1.5" opacity=".6"
+          marker-end="url(#arrowP)" />
+      </svg>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon">🔀</div>
+        <h3>Gateway API</h3>
+        <p>REST endpoints for full CR lifecycle management — create, poll, respond, cancel.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <h3>State Machine</h3>
+        <p>Enforces valid state transitions with optimistic concurrency control.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>Audit Store</h3>
+        <p>Append-only event log capturing every state change for full traceability.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="reveal">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Built for production agent workflows</h2>
+      <p class="section-desc">Everything you need to coordinate between AI agents and human decision-makers.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <h3>State Machine</h3>
+        <p>SUBMITTED → ROUTING → PENDING → RESPONDED → DELIVERED. Every transition validated, every edge case handled.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⏱</div>
+        <h3>Timeout Policies</h3>
+        <p>AUTO_APPROVE, AUTO_REJECT, ESCALATE, BLOCK, or FAIL. Define exactly what happens when humans don't respond in
+          time.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📦</div>
+        <h3>TypeScript SDK</h3>
+        <p>Typed client with <code>submit()</code> for fire-and-forget and <code>coordinate()</code> for submit-and-wait
+          patterns.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <h3>Web Portal</h3>
+        <p>Lightweight Alpine.js SPA with real-time updates via SSE. Urgency-coded, responsive, zero config.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💬</div>
+        <h3>Slack Integration</h3>
+        <p>Block Kit notifications with interactive approve/reject buttons. One-click decisions from Slack.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔐</div>
+        <h3>Audit Trail</h3>
+        <p>Every action recorded — who did what, when, and why. SHA256-hashed API keys with one-show-only creation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK START -->
+  <section id="quickstart">
+    <div class="reveal">
+      <div class="section-label">Quick Start</div>
+      <h2 class="section-title">Up and running in 60 seconds</h2>
+    </div>
+    <div class="code-block reveal">
+      <div class="code-header"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>&nbsp;
+        terminal</div>
+      <pre><span class="cm"># Install dependencies</span>
+<span class="fn">npm</span> install
+
+<span class="cm"># Create an API key for your agent</span>
+<span class="fn">npm</span> run setup-key -- my-agent <span class="str">"My Agent Key"</span>
+
+<span class="cm"># Start the server</span>
+<span class="fn">npm</span> run dev
+<span class="cm"># → Server running on http://localhost:3100</span></pre>
+    </div>
+    <div class="code-block reveal">
+      <div class="code-header"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>&nbsp;
+        submit a coordination request</div>
+      <pre><span class="fn">curl</span> -X POST http://localhost:3100/v1/requests \
+  -H <span class="str">"Authorization: Bearer $HCP_API_KEY"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "intent": "APPROVAL",
+    "urgency": "HIGH",
+    "context_package": {
+      "summary": "Deploy v2.1.0 to production"
+    },
+    "timeout_policy": {
+      "timeout_seconds": 600,
+      "fallback": "BLOCK"
+    },
+    "routing_hints": {
+      "responder_id": "ops-lead",
+      "channel": "portal"
+    }
+  }'</span></pre>
+    </div>
+  </section>
+
+  <!-- API REFERENCE -->
+  <section id="api">
+    <div class="reveal">
+      <div class="section-label">API Reference</div>
+      <h2 class="section-title">RESTful, predictable, typed</h2>
+      <p class="section-desc">All <code>/v1/*</code> endpoints require <code>Authorization: Bearer &lt;key&gt;</code>.
+      </p>
+    </div>
+    <div class="reveal" style="margin-top:2rem">
+      <div class="endpoint"><span class="method post">POST</span><span class="endpoint-path">/v1/requests</span><span
+          class="endpoint-desc">Create Coordination Request</span></div>
+      <div class="endpoint"><span class="method get">GET</span><span class="endpoint-path">/v1/requests/:id</span><span
+          class="endpoint-desc">Get CR (auto-transitions RESPONDED → DELIVERED)</span></div>
+      <div class="endpoint"><span class="method get">GET</span><span class="endpoint-path">/v1/requests</span><span
+          class="endpoint-desc">List CRs with filters</span></div>
+      <div class="endpoint"><span class="method post">POST</span><span
+          class="endpoint-path">/v1/requests/:id/respond</span><span class="endpoint-desc">Submit human response</span>
+      </div>
+      <div class="endpoint"><span class="method delete">DELETE</span><span
+          class="endpoint-path">/v1/requests/:id</span><span class="endpoint-desc">Cancel a CR</span></div>
+      <div class="endpoint"><span class="method get">GET</span><span class="endpoint-path">/v1/audit</span><span
+          class="endpoint-desc">Query audit events</span></div>
+      <div class="endpoint"><span class="method get">GET</span><span class="endpoint-path">/v1/events</span><span
+          class="endpoint-desc">Real-time SSE stream</span></div>
+      <div class="endpoint"><span class="method get">GET</span><span class="endpoint-path">/health</span><span
+          class="endpoint-desc">Health check</span></div>
+    </div>
+  </section>
+
+  <!-- STATE MACHINE -->
+  <section>
+    <div class="reveal">
+      <div class="section-label">State Machine</div>
+      <h2 class="section-title">Every CR follows a defined lifecycle</h2>
+    </div>
+    <div class="arch-diagram reveal">
+      <svg viewBox="0 0 700 520" xmlns="http://www.w3.org/2000/svg" fill="none"
+        style="width:100%;max-width:700px;margin:0 auto;display:block">
+        <defs>
+          <filter id="sg">
+            <feGaussianBlur stdDeviation="3" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <linearGradient id="sga" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="hsl(265,90%,65%)" />
+            <stop offset="100%" stop-color="hsl(190,95%,55%)" />
+          </linearGradient>
+          <linearGradient id="sgb" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="hsl(330,85%,60%)" />
+            <stop offset="100%" stop-color="hsl(265,90%,65%)" />
+          </linearGradient>
+          <linearGradient id="sgc" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="hsl(190,95%,55%)" />
+            <stop offset="100%" stop-color="hsl(130,60%,50%)" />
+          </linearGradient>
+          <marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+            orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="hsl(220,12%,55%)" opacity=".7" />
+          </marker>
+        </defs>
+        <!-- SUBMITTED -->
+        <rect x="270" y="15" width="160" height="48" rx="12" stroke="url(#sga)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.8)" filter="url(#sg)" />
+        <text x="350" y="44" text-anchor="middle" fill="hsl(0,0%,96%)" font-family="JetBrains Mono,monospace"
+          font-size="12" font-weight="700">SUBMITTED</text>
+        <line x1="350" y1="63" x2="350" y2="90" stroke="hsl(220,12%,55%)" stroke-width="1.2" opacity=".5"
+          marker-end="url(#sa)" />
+        <!-- ROUTING -->
+        <rect x="270" y="90" width="160" height="48" rx="12" stroke="url(#sga)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.8)" filter="url(#sg)" />
+        <text x="350" y="119" text-anchor="middle" fill="hsl(0,0%,96%)" font-family="JetBrains Mono,monospace"
+          font-size="12" font-weight="700">ROUTING</text>
+        <line x1="350" y1="138" x2="350" y2="170" stroke="hsl(220,12%,55%)" stroke-width="1.2" opacity=".5"
+          marker-end="url(#sa)" />
+        <!-- PENDING_RESPONSE -->
+        <rect x="245" y="170" width="210" height="48" rx="12" stroke="url(#sga)" stroke-width="2"
+          fill="hsla(228,20%,14%,.8)" filter="url(#sg)" />
+        <text x="350" y="199" text-anchor="middle" fill="hsl(0,0%,96%)" font-family="JetBrains Mono,monospace"
+          font-size="12" font-weight="700">PENDING_RESPONSE</text>
+        <!-- Branches down left: ESCALATED -->
+        <line x1="280" y1="218" x2="130" y2="270" stroke="hsl(220,12%,55%)" stroke-width="1.2" opacity=".5"
+          marker-end="url(#sa)" />
+        <rect x="50" y="270" width="160" height="48" rx="12" stroke="url(#sgb)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.8)" filter="url(#sg)" />
+        <text x="130" y="299" text-anchor="middle" fill="hsl(330,85%,65%)" font-family="JetBrains Mono,monospace"
+          font-size="12" font-weight="700">ESCALATED</text>
+        <!-- ESCALATED loops back to ROUTING -->
+        <path d="M 50 294 Q 20 294 20 200 Q 20 114 270 114" stroke="hsl(330,85%,60%)" stroke-width="1.2" opacity=".4"
+          fill="none" stroke-dasharray="5 4" marker-end="url(#sa)" />
+        <!-- Branches down right: TIMED_OUT -->
+        <line x1="420" y1="218" x2="570" y2="270" stroke="hsl(220,12%,55%)" stroke-width="1.2" opacity=".5"
+          marker-end="url(#sa)" />
+        <rect x="490" y="270" width="160" height="48" rx="12" stroke="url(#sgb)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.8)" filter="url(#sg)" />
+        <text x="570" y="299" text-anchor="middle" fill="hsl(330,85%,65%)" font-family="JetBrains Mono,monospace"
+          font-size="12" font-weight="700">TIMED_OUT</text>
+        <text x="570" y="335" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif" font-size="9"
+          opacity=".7">terminal</text>
+        <!-- Center down: RESPONDED -->
+        <line x1="350" y1="218" x2="350" y2="350" stroke="hsl(220,12%,55%)" stroke-width="1.2" opacity=".5"
+          marker-end="url(#sa)" />
+        <rect x="270" y="350" width="160" height="48" rx="12" stroke="url(#sgc)" stroke-width="1.5"
+          fill="hsla(228,20%,14%,.8)" filter="url(#sg)" />
+        <text x="350" y="379" text-anchor="middle" fill="hsl(190,95%,60%)" font-family="JetBrains Mono,monospace"
+          font-size="12" font-weight="700">RESPONDED</text>
+        <line x1="350" y1="398" x2="350" y2="430" stroke="hsl(220,12%,55%)" stroke-width="1.2" opacity=".5"
+          marker-end="url(#sa)" />
+        <!-- DELIVERED -->
+        <rect x="270" y="430" width="160" height="48" rx="12" stroke="url(#sgc)" stroke-width="2"
+          fill="hsla(228,20%,14%,.8)" filter="url(#sg)" />
+        <text x="350" y="459" text-anchor="middle" fill="hsl(130,60%,55%)" font-family="JetBrains Mono,monospace"
+          font-size="12" font-weight="700">DELIVERED</text>
+        <text x="350" y="495" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif" font-size="9"
+          opacity=".7">terminal</text>
+        <!-- CANCELLED label -->
+        <text x="130" y="355" text-anchor="middle" fill="hsl(220,12%,55%)" font-family="Inter,sans-serif" font-size="10"
+          opacity=".6">Any active → CANCELLED</text>
+      </svg>
+    </div>
+    <div class="grid-2 reveal" style="margin-top:2rem">
+      <div class="card">
+        <h3>Terminal States</h3>
+        <p><code>DELIVERED</code> · <code>TIMED_OUT</code> · <code>CANCELLED</code> — Once reached, no further
+          transitions are possible.</p>
+      </div>
+      <div class="card">
+        <h3>Fallback Behaviors</h3>
+        <p><code>AUTO_APPROVE</code> · <code>AUTO_REJECT</code> · <code>ESCALATE</code> · <code>BLOCK</code> ·
+          <code>FAIL</code> · <code>SKIP</code> — Define what happens on timeout.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section id="stack">
+    <div class="reveal">
+      <div class="section-label">Tech Stack</div>
+      <h2 class="section-title">Modern, minimal dependencies</h2>
+    </div>
+    <div class="badge-grid reveal">
+      <span class="badge">⬢ Node.js (ES2022)</span>
+      <span class="badge">🔷 TypeScript (strict)</span>
+      <span class="badge">⚡ Fastify 5</span>
+      <span class="badge">🗄 SQLite (better-sqlite3)</span>
+      <span class="badge">✅ Zod validation</span>
+      <span class="badge">🆔 ULID identifiers</span>
+      <span class="badge">🔨 tsup bundler</span>
+      <span class="badge">🧪 Vitest (25 tests)</span>
+      <span class="badge">💬 Slack Web API</span>
+      <span class="badge">🏔 Alpine.js portal</span>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>MIT License · <a href="https://github.com/isaacpattis/HCP" target="_blank">GitHub</a> · Built for <a
+        href="https://github.com/isaacpattis" target="_blank">NanoClaw</a> and beyond</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
