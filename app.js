@@ -42,3 +42,14 @@ document.querySelectorAll('.grid-3, .grid-2').forEach(grid => {
   cards.forEach(c => { c.classList.add('reveal'); });
   observer.observe(grid);
 });
+
+// ===== GitHub Stars & Forks =====
+fetch('https://api.github.com/repos/ipattis/HCP')
+  .then(r => r.json())
+  .then(data => {
+    const stars = document.getElementById('star-count');
+    const forks = document.getElementById('fork-count');
+    if (stars && data.stargazers_count !== undefined) stars.textContent = data.stargazers_count;
+    if (forks && data.forks_count !== undefined) forks.textContent = data.forks_count;
+  })
+  .catch(() => { });
