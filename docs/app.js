@@ -53,3 +53,13 @@ fetch('https://api.github.com/repos/ipattis/HCP')
     if (forks && data.forks_count !== undefined) forks.textContent = data.forks_count;
   })
   .catch(() => { });
+
+// ===== Visitor Count =====
+fetch('https://visitor-badge.laobi.icu/badge?page_id=ipattis.HCP')
+  .then(r => r.text())
+  .then(svg => {
+    const match = svg.match(/>(\d+)<\/text>\s*<\/g>\s*<\/svg>/);
+    const el = document.getElementById('view-count');
+    if (match && el) el.textContent = match[1];
+  })
+  .catch(() => { });
